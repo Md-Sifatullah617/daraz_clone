@@ -12,6 +12,7 @@ class CartPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
+          elevation: 0,
           leading: IconButton(
               onPressed: () {
                 // Navigator.pop(context);
@@ -23,7 +24,7 @@ class CartPage extends StatelessWidget {
           centerTitle: true,
           title: Text(
             'My Cart (2)',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
@@ -44,101 +45,103 @@ class CartPage extends StatelessWidget {
             ListView(padding: EdgeInsets.only(bottom: 20.h), children: [
               ...List.generate(3, (index) => const ProductCartSample()),
               //voucher code and apply button
-              VoucherSecton(),
-              JustForYouSection(),
+              const VoucherSecton(),
+              const JustForYouSection(),
             ]),
             Positioned(
-              bottom: 7,
+              bottom: 0,
               left: 0,
               right: 0,
               child: BottomAppBar(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  height: 50.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                              value: false,
-                              shape: const CircleBorder(),
-                              activeColor: Colors.red,
-                              onChanged: (value) {}),
-                          Text(
-                            'All',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                      RichText(
-                          textAlign: TextAlign.right,
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: 'Delivery: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(
-                                      fontSize: 10.sp,
+                elevation: 0,
+                color: Colors.white,
+                height: 50.h,
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                            value: false,
+                            shape: const CircleBorder(),
+                            activeColor: Colors.red,
+                            onChanged: (value) {}),
+                        Text(
+                          'All',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    RichText(
+                        textAlign: TextAlign.right,
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: 'Delivery: ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(
+                                    fontSize: 10.sp,
+                                    color: Colors.grey,
+                                  )),
+                          TextSpan(
+                              text: '৳ 65',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      fontSize: 12.sp,
                                       color: Colors.grey,
-                                    )),
-                            TextSpan(
-                                text: '৳ 65',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        fontSize: 12.sp,
-                                        color: Colors.grey,
-                                        decoration:
-                                            TextDecoration.lineThrough)),
-                            TextSpan(
-                                text: '\tFree\n',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(
-                                      fontSize: 10.sp,
+                                      decoration: TextDecoration.lineThrough)),
+                          TextSpan(
+                              text: '\tFree\n',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(
+                                    fontSize: 10.sp,
+                                    color: Colors.red,
+                                  )),
+                          TextSpan(
+                              text: 'Total: ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(
+                                    color: Colors.grey,
+                                  )),
+                          TextSpan(
+                              text: '৳ 420',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
                                       color: Colors.red,
-                                    )),
-                            TextSpan(
-                                text: 'Total: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(
-                                      color: Colors.grey,
-                                    )),
-                            TextSpan(
-                                text: '৳ 420',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold)),
-                          ])),
-                      ElevatedButton(
-                          onPressed: () {
-                            Get.to(() => const PlaceOrderPage());
-                          },
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Colors.red,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.r),
-                            ),
+                                      fontWeight: FontWeight.bold)),
+                        ])),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => const PlaceOrderPage());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.r),
                           ),
-                          child: Text(
-                            'Checkout (1)',
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.white,
-                                    ),
-                          ))
-                    ],
-                  ),
+                        ),
+                        child: Text(
+                          'Checkout (1)',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ))
+                  ],
                 ),
               ),
             )
@@ -155,7 +158,7 @@ class JustForYouSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
         margin: EdgeInsets.symmetric(vertical: 5.h),
         child: Column(children: [
           RichText(
@@ -188,8 +191,8 @@ class JustForYouSection extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 10.w,
-                mainAxisSpacing: 10.h,
+                crossAxisSpacing: 5.w,
+                mainAxisSpacing: 5.h,
                 childAspectRatio: 0.74,
               ),
               itemCount: 7,
@@ -353,7 +356,7 @@ class VoucherSecton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
       color: Colors.white,
       margin: EdgeInsets.symmetric(vertical: 5.h),
       child: Row(
@@ -416,7 +419,7 @@ class ProductCartSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       color: Colors.white,
       margin: EdgeInsets.symmetric(vertical: 5.h),
       child: Column(
@@ -472,7 +475,7 @@ class ProductCartSample extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          ProductInfo(),
+          const ProductInfo(),
         ],
       ),
     );

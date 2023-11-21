@@ -12,15 +12,16 @@ class PlaceOrderPage extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: IconButton(
             onPressed: () {
-              // Navigator.pop(context);
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,
             )),
+        titleSpacing: 0,
         title: Text(
           'Checkout (2)',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
@@ -256,7 +257,7 @@ class PlaceOrderPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.monetization_on,
                       ),
                       SizedBox(
@@ -279,7 +280,7 @@ class PlaceOrderPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.confirmation_num_outlined,
                         color: Colors.red,
                       ),
@@ -292,7 +293,7 @@ class PlaceOrderPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         'No Applicable Voucher',
                         style: Theme.of(context).textTheme.bodySmall,
@@ -304,7 +305,7 @@ class PlaceOrderPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.discount_outlined,
                         color: Colors.red,
                       ),
@@ -317,7 +318,7 @@ class PlaceOrderPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         'Enter Store/Daraz Code',
                         style: Theme.of(context).textTheme.bodySmall,
@@ -430,48 +431,44 @@ class PlaceOrderPage extends StatelessWidget {
             ),
           ]),
       bottomNavigationBar: BottomAppBar(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          height: 50.h,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                  textAlign: TextAlign.left,
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Total: ',
-                        style:
-                            Theme.of(context).textTheme.titleSmall!.copyWith()),
-                    TextSpan(
-                        text: '৳ 420\n',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: 'Vat Included, where applicable',
-                        style: Theme.of(context).textTheme.bodySmall),
-                  ])),
-              ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.r),
-                    ),
+        elevation: 0,
+        color: Colors.white,
+        height: 50.h,
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: 'Total: ',
+                      style:
+                          Theme.of(context).textTheme.titleSmall!.copyWith()),
+                  TextSpan(
+                      text: '৳ 420\n',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Colors.red, fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: 'Vat Included, where applicable',
+                      style: Theme.of(context).textTheme.bodySmall),
+                ])),
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
-                  child: Text(
-                    'Place Order',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Colors.white,
-                        ),
-                  ))
-            ],
-          ),
+                ),
+                child: Text(
+                  'Place Order',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
+                ))
+          ],
         ),
       ),
     );
