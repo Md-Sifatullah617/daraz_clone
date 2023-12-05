@@ -1,8 +1,8 @@
 import 'package:daraz_clone/controller/address_controller.dart';
-import 'package:easy_stepper/easy_stepper.dart';
+import 'package:daraz_clone/utils/custom_widget/custom_bottom_sheet.dart';
+import 'package:daraz_clone/utils/custom_widget/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class SelectAreaPage extends StatelessWidget {
@@ -78,218 +78,12 @@ class SelectAreaPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) => Container(
-                            height: Get.height * 0.8,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Get.width * 0.05,
-                              vertical: Get.height * 0.02,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.back();
-                                      },
-                                      child: Text('Close',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      'Select Your Area',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    const Spacer(),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: Get.height * 0.02,
-                                ),
-                                //show the selected value with steepers
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: EasyStepper(
-                                    activeStep: controller.activeStep.value,
-                                    direction: Axis.vertical,
-                                    lineStyle: LineStyle(
-                                      lineLength: Get.height * 0.02,
-                                      lineSpace: 0,
-                                      lineType: LineType.normal,
-                                      defaultLineColor: Colors.white,
-                                      finishedLineColor: Colors.orange,
-                                    ),
-                                    activeStepTextColor: Colors.black87,
-                                    finishedStepTextColor: Colors.black87,
-                                    internalPadding: 0,
-                                    showLoadingAnimation: false,
-                                    stepRadius: 8,
-                                    showStepBorder: false,
-                                    steps: [
-                                      EasyStep(
-                                        customStep: CircleAvatar(
-                                          radius: 7,
-                                          backgroundColor:
-                                              controller.activeStep.value >= 0
-                                                  ? Colors.orange
-                                                  : Colors.white,
-                                        ),
-                                        title: 'Waiting',
-                                      ),
-                                      EasyStep(
-                                        customStep: CircleAvatar(
-                                          radius: 8,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            radius: 7,
-                                            backgroundColor:
-                                                controller.activeStep.value >= 1
-                                                    ? Colors.orange
-                                                    : Colors.white,
-                                          ),
-                                        ),
-                                        title: 'Order Received',
-                                        topTitle: true,
-                                      ),
-                                      EasyStep(
-                                        customStep: CircleAvatar(
-                                          radius: 8,
-                                          backgroundColor: Colors.white,
-                                          child: CircleAvatar(
-                                            radius: 7,
-                                            backgroundColor:
-                                                controller.activeStep.value >= 2
-                                                    ? Colors.orange
-                                                    : Colors.white,
-                                          ),
-                                        ),
-                                        title: 'Preparing',
-                                      ),
-                                    ],
-                                    onStepReached: (index) {
-                                      controller.activeStep.value = index;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: Get.height * 0.02,
-                                ),
-                                Text(
-                                    textAlign: TextAlign.left,
-                                    controller.activeStep.value == 0
-                                        ? "Select The Division"
-                                        : controller.activeStep.value == 1
-                                            ? "Select The District"
-                                            : "Select The Area",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
-                                Container(
-                                  height: Get.height * 0.5,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Get.width * 0.02,
-                                    vertical: Get.height * 0.01,
-                                  ),
-                                  margin: EdgeInsets.symmetric(
-                                    vertical: Get.height * 0.02,
-                                    horizontal: Get.width * 0.02,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: ListView.builder(
-                                    itemCount: controller.activeStep.value == 0
-                                        ? controller.divisionList.length
-                                        : controller.activeStep.value == 1
-                                            ? controller.districtList.length
-                                            : controller.areaList.length,
-                                    itemBuilder: (context, index) => Column(
-                                      children: [
-                                        ListTile(
-                                          onTap: () {
-                                            if (controller.activeStep.value ==
-                                                0) {
-                                              controller
-                                                      .selectedDivision.value =
-                                                  controller.divisionList[index]
-                                                      .name!;
-                                              controller.activeStep.value = 1;
-                                            } else if (controller
-                                                    .activeStep.value ==
-                                                1) {
-                                              controller
-                                                      .selectedDistrict.value =
-                                                  controller.districtList[index]
-                                                      .name!;
-                                              controller.activeStep.value = 2;
-                                            } else {
-                                              controller.selectedArea.value =
-                                                  controller
-                                                      .areaList[index].name!;
-                                            }
-                                          },
-                                          title: Text(
-                                            controller.activeStep.value == 0
-                                                ? controller
-                                                    .divisionList[index].name!
-                                                : controller.activeStep.value ==
-                                                        1
-                                                    ? controller
-                                                        .districtList[index]
-                                                        .name!
-                                                    : controller
-                                                        .areaList[index].name!,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          //if  last index not show
-                                          subtitle: index !=
-                                                  controller
-                                                          .divisionList.length -
-                                                      1
-                                              ? Divider(
-                                                  thickness: 0.6,
-                                                  endIndent: Get.width * 0.02,
-                                                  color: Colors.grey.shade300,
-                                                )
-                                              : null,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        customBottomSheet(context);
                       },
                       child: AbsorbPointer(
                         child: CustomFieldText(
-                          txtcontroller: controller.fullNameController,
+                          isSuffix: false,
+                          txtcontroller: controller.fullAreaController,
                           title: "Area",
                           hintText: 'Select the region, city, area',
                         ),
@@ -300,7 +94,7 @@ class SelectAreaPage extends StatelessWidget {
                       endIndent: Get.width * 0.02,
                     ),
                     CustomFieldText(
-                      txtcontroller: controller.phoneNumberController,
+                      txtcontroller: controller.addressController,
                       title: "Address",
                       hintText: 'House no. / Building / Street / Area',
                     ),
@@ -309,7 +103,7 @@ class SelectAreaPage extends StatelessWidget {
                       endIndent: Get.width * 0.02,
                     ),
                     CustomFieldText(
-                      txtcontroller: controller.phoneNumberController,
+                      txtcontroller: controller.landMarkController,
                       title: "Landmark (Optional)",
                       hintText: 'E.g. Opposite City Hospital',
                     ),
@@ -342,7 +136,7 @@ class SelectAreaPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {},
                           child: Container(
-                            height: Get.height * 0.04,
+                            height: Get.height * 0.05,
                             padding: EdgeInsets.symmetric(
                               horizontal: Get.width * 0.02,
                               vertical: Get.height * 0.01,
@@ -370,7 +164,7 @@ class SelectAreaPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {},
                           child: Container(
-                            height: Get.height * 0.04,
+                            height: Get.height * 0.05,
                             padding: EdgeInsets.symmetric(
                               horizontal: Get.width * 0.02,
                               vertical: Get.height * 0.01,
@@ -457,63 +251,6 @@ class SelectAreaPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomFieldText extends StatelessWidget {
-  final TextEditingController txtcontroller;
-  final String? hintText;
-  final String? title;
-  const CustomFieldText({
-    super.key,
-    required this.txtcontroller,
-    this.hintText,
-    this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title!,
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-        Expanded(
-          child: TextFormField(
-            controller: txtcontroller,
-            textAlign: TextAlign.right,
-            decoration: InputDecoration(
-              constraints: BoxConstraints(
-                maxHeight: 30.h,
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.02, vertical: Get.height * 0.01),
-              hintText: hintText!,
-              hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Colors.grey,
-                  ),
-              suffix: ValueListenableBuilder(
-                valueListenable: txtcontroller,
-                builder: (context, value, child) => GestureDetector(
-                  onTap: () {
-                    txtcontroller.clear();
-                  },
-                  child: Icon(
-                    FontAwesomeIcons.circleXmark,
-                    size: 15.sp,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

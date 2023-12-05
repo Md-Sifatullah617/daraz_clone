@@ -9,11 +9,12 @@ class AddressController extends GetxController {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController fullAreaController = TextEditingController();
+  final TextEditingController landMarkController = TextEditingController();
   var isLoading = false.obs;
-  var activeStep = 0.obs;
-  var selectedDivision = "".obs;
-  var selectedDistrict = "".obs;
-  var selectedArea = "".obs;
+  final TextEditingController divisionController = TextEditingController();
+  final TextEditingController districtController = TextEditingController();
+  final TextEditingController areaController = TextEditingController();
   List<Division> divisionList = [];
   List<Districts> districtList = [];
   List<Datum> areaList = [];
