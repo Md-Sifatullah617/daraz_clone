@@ -158,7 +158,13 @@ void customBottomSheet(context) {
                         : "Select The Area",
                 style: Theme.of(context).textTheme.bodyMedium),
             Container(
-              height: Get.height * 0.53,
+              height: controller.divisionController.text.isEmpty
+                  ? Get.height * 0.53
+                  : controller.districtController.text.isEmpty
+                      ? Get.height * 0.49
+                      : controller.areaController.text.isEmpty
+                          ? Get.height * 0.45
+                          : Get.height * 0.45,
               padding: EdgeInsets.symmetric(
                 horizontal: Get.width * 0.02,
                 vertical: Get.height * 0.01,
