@@ -158,7 +158,7 @@ void customBottomSheet(context) {
                         : "Select The Area",
                 style: Theme.of(context).textTheme.bodyMedium),
             Container(
-              height: Get.height * 0.45,
+              height: Get.height * 0.53,
               padding: EdgeInsets.symmetric(
                 horizontal: Get.width * 0.02,
                 vertical: Get.height * 0.01,
@@ -171,55 +171,68 @@ void customBottomSheet(context) {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: ListView.builder(
-                itemCount: controller.divisionController.text.isEmpty
-                    ? controller.divisionList.length
-                    : controller.districtController.text.isEmpty
-                        ? controller.districtList.length
-                        : controller.areaList.length,
-                itemBuilder: (context, index) => Column(
-                  children: [
-                    ListTile(
-                      onTap: () {
-                        if (controller.divisionController.text.isEmpty) {
-                          controller.divisionController.text =
-                              controller.divisionList[index].name!.toString();
-                          controller.districtController.text = '';
-                          controller.areaController.text = '';
-                          controller.update();
-                        } else if (controller.districtController.text.isEmpty) {
-                          controller.districtController.text =
-                              controller.districtList[index].name!.toString();
-                          controller.areaController.text = '';
-                          controller.update();
-                        } else {
-                          controller.areaController.text =
-                              controller.areaList[index].name!.toString();
-                          controller.update();
-                        }
-                      },
-                      title: Text(
-                        controller.divisionController.text.isEmpty
-                            ? controller.divisionList[index].name!
-                            : controller.districtController.text.isEmpty
-                                ? controller.districtList[index].name!
-                                : controller.areaList[index].name!,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+              child: controller.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(color: Colors.red),
+                    )
+                  : ListView.builder(
+                      itemCount: controller.divisionController.text.isEmpty
+                          ? controller.divisionList.length
+                          : controller.districtController.text.isEmpty
+                              ? controller.districtList.length
+                              : controller.areaList.length,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          if (controller.divisionController.text.isEmpty) {
+                            controller.divisionController.text =
+                                controller.divisionList[index].name!.toString();
+                            controller.districtController.text = '';
+                            controller.areaController.text = '';
+                            controller.update();
+                          } else if (controller
+                              .districtController.text.isEmpty) {
+                            controller.districtController.text =
+                                controller.districtList[index].name!.toString();
+                            controller.areaController.text = '';
+                            controller.update();
+                          } else {
+                            controller.areaController.text =
+                                controller.areaList[index].name!.toString();
+                            controller.update();
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Get.width * 0.02,
+                            vertical: Get.height * 0.01,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.divisionController.text.isEmpty
+                                    ? controller.divisionList[index].name!
+                                    : controller.districtController.text.isEmpty
+                                        ? controller.districtList[index].name!
+                                        : controller.areaList[index].name!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              if (index != controller.divisionList.length - 1)
+                                Divider(
+                                  thickness: 0.6,
+                                  endIndent: Get.width * 0.02,
+                                  color: Colors.grey.shade300,
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
-                      //if  last index not show
-                      subtitle: index != controller.divisionList.length - 1
-                          ? Divider(
-                              thickness: 0.6,
-                              endIndent: Get.width * 0.02,
-                              color: Colors.grey.shade300,
-                            )
-                          : null,
                     ),
-                  ],
-                ),
-              ),
             ),
             SizedBox(
               height: Get.height * 0.02,

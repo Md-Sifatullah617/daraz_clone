@@ -201,7 +201,10 @@ class SelectAreaPage extends StatelessWidget {
                               .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Switch(value: true, onChanged: (value) {})
+                        Switch(
+                            value: true,
+                            activeTrackColor: Colors.red,
+                            onChanged: (value) {})
                       ],
                     ),
                     SizedBox(
@@ -217,7 +220,10 @@ class SelectAreaPage extends StatelessWidget {
                               .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Switch(value: false, onChanged: (value) {})
+                        Switch(
+                            value: false,
+                            activeTrackColor: Colors.red,
+                            onChanged: (value) {})
                       ],
                     ),
                   ],
