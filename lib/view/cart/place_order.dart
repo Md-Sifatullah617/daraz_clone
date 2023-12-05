@@ -10,6 +10,8 @@ class PlaceOrderPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -175,7 +177,6 @@ class PlaceOrderPage extends StatelessWidget {
                               Icons.airplane_ticket_outlined,
                               color: Colors.red,
                             ),
-                            horizontalTitleGap: -5,
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
