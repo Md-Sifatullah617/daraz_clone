@@ -1,8 +1,8 @@
+import 'package:daraz_clone/view/hompage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'view/cart/cart_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           fontFamily: GoogleFonts.inter().fontFamily,
           useMaterial3: true,
         ),
-        home: const CartPage(),
+        home: const MyHomePage(),
       ),
     );
   }
