@@ -1,5 +1,6 @@
 import 'package:daraz_clone/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class FoodPandaPage extends StatefulWidget {
@@ -256,6 +257,59 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
               ),
             ],
           ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          color: Colors.white,
+          height: 50.h,
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+          child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: AppColors.foodpandaColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //number of items
+                  Container(
+                    height: 30.h,
+                    width: 30.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.foodpandaColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "2",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'View your cart',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.white,
+                        ),
+                  ),
+                  //total price
+                  Text(
+                    'Tk 460',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              )),
         ),
       ),
     );
