@@ -1,3 +1,4 @@
+import 'package:daraz_clone/view/foodpanda/foodpanda.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,6 +42,12 @@ class MyHomePage extends StatelessWidget {
                   Get.to(() => const SelectAreaPage());
                 },
                 child: const Text('Add Address Page'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const FoodPandaPage());
+                },
+                child: const Text('Food Panda Page'),
               ),
             ],
           ),
