@@ -1,4 +1,6 @@
 import 'package:daraz_clone/utils/colors.dart';
+import 'package:daraz_clone/utils/custom_widget/custom_bottom_sheet.dart';
+import 'package:daraz_clone/utils/custom_widget/foodPandaBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,8 @@ class FoodPandaPage extends StatefulWidget {
   State<FoodPandaPage> createState() => _FoodPandaPageState();
 }
 
-class _FoodPandaPageState extends State<FoodPandaPage> {
+class _FoodPandaPageState extends State<FoodPandaPage>
+    with SingleTickerProviderStateMixin {
   List categoryList = [
     "Popular",
     "Roti & Paratha",
@@ -68,6 +71,41 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
       "image": "assets/images/food.jpeg"
     },
   ];
+  late TabController _tabController;
+  final ScrollController _scrollController = ScrollController();
+  List<double> tabOffsets = [];
+  double scrollPossition = 0;
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+        initialIndex: currentIndex, length: categoryList.length, vsync: this);
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    print('Scroll position: ${_scrollController.offset}');
+    setState(() {
+      scrollPossition = _scrollController.offset;
+    });
+    // This method calculates the offset of each section and stores it in the tabOffsets list
+    for (int i = 0; i < categoryList.length; i++) {
+      double offset = 0;
+      for (int j = 0; j < i; j++) {
+        offset += 50 + 10;
+      }
+      tabOffsets.add(offset);
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +138,34 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
               ),
             ),
           ],
+          bottom: scrollPossition > 485
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(30.h),
+                  child: TabBar(
+                    isScrollable: true,
+                    labelColor: AppColors.foodpandaColor,
+                    unselectedLabelColor: Colors.grey,
+                    indicatorColor: AppColors.foodpandaColor,
+                    tabAlignment: TabAlignment.start,
+                    controller: _tabController,
+                    onTap: (index) {
+                      _scrollController.animateTo(
+                        tabOffsets[index],
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    tabs: categoryList
+                        .map((e) => Tab(
+                              child: Text(e),
+                            ))
+                        .toList(),
+                  ),
+                )
+              : null,
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               const UpperPartoftheScreen(),
@@ -110,20 +174,28 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
               ),
               //food categories in tab bar
               TabBar(
+                controller: _tabController,
                 isScrollable: true,
                 labelColor: AppColors.foodpandaColor,
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: AppColors.foodpandaColor,
                 tabAlignment: TabAlignment.start,
+                onTap: (index) {
+                  _scrollController.animateTo(
+                    tabOffsets[index],
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
                 tabs: categoryList
                     .map((e) => Tab(
                           child: Text(e),
                         ))
                     .toList(),
               ),
-              Container(
-                height: Get.height * 3,
-                child: TabBarView(children: [
+              SizedBox(
+                height: Get.height * 9.5,
+                child: TabBarView(controller: _tabController, children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -160,97 +232,120 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         )),
                       ),
-                      Column(
-                        children: [
-                          ListView.separated(
-                            itemCount: foodList.length,
-                            separatorBuilder: (context, index) => Divider(),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Get.width * 0.05,
-                                vertical: Get.height * 0.02),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          foodList[index]["name"],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          foodList[index]["discription"],
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(color: Colors.black54),
-                                        ),
-                                        SizedBox(
-                                          height: Get.height * 0.01,
-                                        ),
-                                        Text(foodList[index]["price"]),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.02,
-                                  ),
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        height: Get.height * 0.1,
-                                        width: Get.width * 0.2,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: Get.height * 0.01,
-                                            vertical: Get.height * 0.01),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: foodList[index]["image"] ==
-                                                    ""
-                                                ? null
-                                                : DecorationImage(
-                                                    image: AssetImage(
-                                                        foodList[index]["image"]
-                                                            .toString()),
-                                                    fit: BoxFit.cover)),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: -5,
-                                        child: Container(
-                                          height: Get.height * 0.03,
-                                          width: Get.width * 0.1,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.foodpandaColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 15,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ]),
-                          ),
-                        ],
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
                       ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Curry",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Special Karahi",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Rice",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Family Package",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Dessert",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Beverage",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Juice",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
+                      SizedBox(
+                        height: Get.height * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Get.width * 0.05,
+                          vertical: Get.height * 0.02,
+                        ),
+                        child: RichText(
+                            text: TextSpan(
+                          text: "Shakes",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ),
+                      customFoodListView(),
                     ],
                   ),
                 ]),
@@ -311,6 +406,92 @@ class _FoodPandaPageState extends State<FoodPandaPage> {
                 ],
               )),
         ),
+      ),
+    );
+  }
+
+  ListView customFoodListView() {
+    return ListView.separated(
+      itemCount: foodList.length,
+      separatorBuilder: (context, index) => Divider(),
+      padding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.05, vertical: Get.height * 0.02),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) => InkWell(
+        onTap: () {
+          foodPandaBottomSheet(context);
+        },
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  foodList[index]["name"],
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  foodList[index]["discription"],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: Colors.black54),
+                ),
+                SizedBox(
+                  height: Get.height * 0.01,
+                ),
+                Text(foodList[index]["price"]),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: Get.width * 0.02,
+          ),
+          Stack(
+            children: [
+              Container(
+                height: Get.height * 0.1,
+                width: Get.width * 0.2,
+                margin: EdgeInsets.symmetric(
+                    horizontal: Get.height * 0.01, vertical: Get.height * 0.01),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: foodList[index]["image"] == ""
+                        ? null
+                        : DecorationImage(
+                            image:
+                                AssetImage(foodList[index]["image"].toString()),
+                            fit: BoxFit.cover)),
+              ),
+              Positioned(
+                bottom: 0,
+                right: -5,
+                child: Container(
+                  height: Get.height * 0.03,
+                  width: Get.width * 0.1,
+                  decoration: BoxDecoration(
+                    color: AppColors.foodpandaColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
+        ]),
       ),
     );
   }

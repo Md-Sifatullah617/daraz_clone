@@ -8,6 +8,7 @@ void customBottomSheet(context) {
   Get.bottomSheet(
     isScrollControlled: true,
     GetBuilder<AddressController>(
+      init: AddressController(),
       builder: (controller) => Container(
         height: Get.height * 0.8,
         padding: EdgeInsets.symmetric(
