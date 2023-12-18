@@ -70,39 +70,42 @@ class _FoodPandaPageState extends State<FoodPandaPage>
       "image": "assets/images/food.jpeg"
     },
   ];
+
   late TabController _tabController;
+  final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   List<double> tabOffsets = [];
-  double scrollPossition = 0;
-  int currentIndex = 0;
+  double scrollPosition = 0;
+  int selectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-        initialIndex: currentIndex, length: categoryList.length, vsync: this);
+        initialIndex: selectedTab, length: categoryList.length, vsync: this);
     _scrollController.addListener(_scrollListener);
   }
 
   void _scrollListener() {
-    print('Scroll position: ${_scrollController.offset}');
     setState(() {
-      scrollPossition = _scrollController.offset;
+      scrollPosition = _scrollController.offset;
     });
-    // This method calculates the offset of each section and stores it in the tabOffsets list
-    for (int i = 0; i < categoryList.length; i++) {
+
+    // Calculate the offset for each tab
+    tabOffsets = List.generate(categoryList.length, (index) {
       double offset = 0;
-      for (int j = 0; j < i; j++) {
-        offset += 50 + 10;
+      for (int i = 0; i < index; i++) {
+        offset += 50 + 10; // Height of the Tab + Spacing
       }
-      tabOffsets.add(offset);
-    }
+      return offset;
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -137,7 +140,7 @@ class _FoodPandaPageState extends State<FoodPandaPage>
               ),
             ),
           ],
-          bottom: scrollPossition > 485
+          bottom: scrollPosition > 485
               ? PreferredSize(
                   preferredSize: Size.fromHeight(30.h),
                   child: TabBar(
@@ -180,6 +183,9 @@ class _FoodPandaPageState extends State<FoodPandaPage>
                 indicatorColor: AppColors.foodpandaColor,
                 tabAlignment: TabAlignment.start,
                 onTap: (index) {
+                  _pageController.animateToPage(index,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOut);
                   _scrollController.animateTo(
                     tabOffsets[index],
                     duration: Duration(milliseconds: 500),
@@ -194,160 +200,210 @@ class _FoodPandaPageState extends State<FoodPandaPage>
               ),
               SizedBox(
                 height: Get.height * 9.5,
-                child: TabBarView(controller: _tabController, children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: PageView(
+                    controller: _pageController,
+                    scrollDirection: Axis.vertical,
                     children: [
-                      SizedBox(
-                        height: Get.height * 0.02,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                                    text: "🔥Popular\n",
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                    children: [
+                                  TextSpan(
+                                    text: "Most ordered right now",
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  )
+                                ])),
+                          ),
+                          //food items
+                          PopularSection(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                                text: "🔥Popular\n",
-                                style: Theme.of(context).textTheme.titleLarge,
-                                children: [
-                              TextSpan(
-                                text: "Most ordered right now",
-                                style: Theme.of(context).textTheme.titleSmall,
-                              )
-                            ])),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Roti & Paratha",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      //food items
-                      PopularSection(),
-                      SizedBox(
-                        height: Get.height * 0.02,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Curry",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Roti & Paratha",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Special Karahi",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Rice",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Curry",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Family Package",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Dessert",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Special Karahi",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Beverage",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Juice",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Rice",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                              vertical: Get.height * 0.02,
+                            ),
+                            child: RichText(
+                                text: TextSpan(
+                              text: "Shakes",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                          ),
+                          customFoodListView(),
+                        ],
                       ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Family Package",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Dessert",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Beverage",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Juice",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ),
-                      customFoodListView(),
-                      SizedBox(
-                        height: Get.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Get.width * 0.05,
-                          vertical: Get.height * 0.02,
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                          text: "Shakes",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ),
-                      customFoodListView(),
-                    ],
-                  ),
-                ]),
+                    ]),
               ),
             ],
           ),
