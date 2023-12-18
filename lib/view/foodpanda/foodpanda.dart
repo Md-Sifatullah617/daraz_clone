@@ -1,5 +1,4 @@
 import 'package:daraz_clone/utils/colors.dart';
-import 'package:daraz_clone/utils/custom_widget/custom_bottom_sheet.dart';
 import 'package:daraz_clone/utils/custom_widget/foodPandaBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -420,7 +419,7 @@ class _FoodPandaPageState extends State<FoodPandaPage>
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) => InkWell(
         onTap: () {
-          foodPandaBottomSheet(context);
+          foodPandaBottomSheet(context, data: foodList[index]);
         },
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
